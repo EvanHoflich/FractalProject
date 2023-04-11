@@ -1,28 +1,30 @@
-%Programmer: Evan Hoflich
-%Date: 16/09/2020
-%Purpose: Assigns points in an array an RGB colour value depending on its
-%value
+function [colourImage] = ColourJulia(setPoints, colourMap)
+% This function takes a set of points with values corresponding to the
+% number of iterations of the f(z) function made before abs(z) >= 3. It
+% colours these points in using a colour map and stores the image data in
+% an array.
 
-function fractalImage = ColourJulia(points, colourMap)
+% Authored by Samuel Mason
 
-[rows, columns] = size(points);       %Find the number of rows and columns in the input array 
-fractalImage = zeros(rows, columns);  %Creates a grid of zeros the same height and width of the array given
-    
-    
-for c=1:columns                       %Repeats the function for every value in the array (row*column)
-    for r=1:rows
-        if points(r,c) ~= 0           %Colours every value besides zero
-            %Assigns a red RGB value depending on position of the value "points" in the array of colour values
-            fractalImage(r, c, 1) = colourMap(points(r,c), 1)*255; 
-            %Assigns a green RGB value depending on position of the value "points" in the array of colour values
-            fractalImage(r, c, 2) = colourMap(points(r,c), 2)*255;
-            %Assigns a blue RGB value depending on position of the value "points" in the array of colour values
-            fractalImage(r, c, 3) = colourMap(points(r,c), 3)*255;
+% Pre-allocate the image data array size for efficiency.
+[arrayWidth, arrayLength] = size(setPoints);
+colourImage = zeros(arrayWidth, arrayLength, 3);
+
+% This loop goes through and replaces colours in the array of the image
+% data with ones corresponding to the value in setPoints at that index and
+% according to the colour map specified.
+for i = 1:arrayLength
+    for j = 1:arrayWidth
+        
+        if setPoints(j, i) ~= 0
+            colourImage(j, i, 1) = colourMap(setPoints(j, i), 1) * 255;
+            colourImage(j, i, 2) = colourMap(setPoints(j, i), 2) * 255;
+            colourImage(j, i, 3) = colourMap(setPoints(j, i), 3) * 255;
         end
+        
     end
 end
-    
-fractalImage = uint8(fractalImage); %Converts a double array to an uint8 array
 
-
-end
+% Converts the image to an 8 bit unsigned integer so that it can be
+% accurately displayed as an image.
+colourImage = uint8(colourImage);
